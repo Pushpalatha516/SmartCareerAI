@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Analyze Resume - SmartCareer AI</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+
+        <div class="logo">
+            SmartCareer AI
+        </div>
+
+        <a href="/" class="nav-link">
+            Home
+        </a>
+
+    </nav>
+
+
+    <!-- Analyzer Section -->
+    <section class="analyzer-section">
+
+        <div class="analyzer-container">
+
+            <h1>Analyze Your Resume</h1>
+
+            <p>
+                Upload your resume or paste your resume text
+                to discover your job readiness.
+            </p>
+
+
+            <form
+                action="/analyze"
+                method="POST"
+                enctype="multipart/form-data"
+            >
+
+                <!-- Job Role -->
+
+                <div class="form-group">
+
+                    <label for="job_role">
+                        Select Target Job Role
+                    </label>
+
+                    <select
+                        name="job_role"
+                        id="job_role"
+                        required
+                    >
+
+                        <option value="">
+                            -- Select a Job Role --
+                        </option>
+
+                        <option value="software_engineer">
+                            Software Engineer
+                        </option>
+
+                        <option value="python_developer">
+                            Python Developer
+                        </option>
+
+                        <option value="data_analyst">
+                            Data Analyst
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Resume Upload -->
+
+                <div class="form-group">
+
+                    <label for="resume_file">
+                        Upload Resume (PDF)
+                    </label>
+
+                    <input
+                        type="file"
+                        name="resume_file"
+                        id="resume_file"
+                        accept=".pdf"
+                    >
+
+                </div>
+
+
+                <!-- Resume Text -->
+
+                <div class="form-group">
+
+                    <label for="resume_text">
+                        Or Paste Resume Text
+                    </label>
+
+                    <textarea
+                        name="resume_text"
+                        id="resume_text"
+                        rows="12"
+                        placeholder="Paste your resume content here..."
+                    ></textarea>
+
+                </div>
+
+
+                <!-- Submit -->
+
+                <button
+                    type="submit"
+                    class="btn-primary analyze-button"
+                >
+                    🚀 Analyze My Resume
+                </button>
+
+            </form>
+
+        </div>
+
+    </section>
+
+</body>
+
+</html>

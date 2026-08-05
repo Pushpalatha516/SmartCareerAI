@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Analysis Result - SmartCareer AI</title>
+
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/style.css') }}"
+>
+
+
+</head>
+
+<body>
+
+
+<nav class="navbar">
+
+    <div class="logo">
+        SmartCareer AI
+    </div>
+
+    <a href="/" class="nav-link">
+        Home
+    </a>
+
+</nav>
+
+
+<section class="analyzer-section">
+
+    <div class="analyzer-container">
+
+        <h1>Resume Analysis Result</h1>
+
+        <p>
+            Target Role:
+            <strong>{{ job_role }}</strong>
+        </p>
+
+
+        <!-- Job Readiness Score -->
+
+        <div class="score-box">
+
+
+<h2>Job Readiness Score</h2>
+
+<div class="score-circle"
+     style="--score: {{ result.score }}%;">
+
+    <div class="score-circle-inner">
+
+        <span class="score">
+            {{ result.score }}%
+        </span>
+
+    </div>
+
+</div>
+
+<p class="readiness">
+    {{ result.readiness }}
+</p>
+<p class="score-summary">
+    {{ result.summary }}
+</p>
+<div class="score-breakdown">
+
+    <div class="breakdown-card">
+        <h3>{{ result.matched_count }}</h3>
+        <p>Skills Matched</p>
+    </div>
+
+    <div class="breakdown-card">
+        <h3>{{ result.missing_count }}</h3>
+        <p>Skills Missing</p>
+    </div>
+
+</div>
+
+
+</div>
+
+
+
+        <!-- Matched Skills -->
+
+        <div class="result-section">
+
+            <h2>✅ Matched Skills</h2>
+
+            {% if result.matched_skills %}
+
+                <ul>
+
+                    {% for skill in result.matched_skills %}
+
+                        <li>{{ skill }}</li>
+
+                    {% endfor %}
+
+                </ul>
+
+            {% else %}
+
+                <p>No matching skills were detected.</p>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- Recommended Next Steps -->
+
+        <div class="result-section">
+
+            <h2>🎯 Recommended Next Steps</h2>
+
+            {% if result.recommendations %}
+
+                {% for item in result.recommendations %}
+
+                    <div class="recommendation-card">
+
+                        <h3>
+                            {{ item.skill }}
+                        </h3>
+
+                        <p>
+                            {{ item.recommendation }}
+                        </p>
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <p>
+                    Great! No additional recommendations at this time.
+                </p>
+
+            {% endif %}
+
+        </div>
+        <!-- Missing Skills -->
+
+<div class="result-section">
+
+
+<h2>❌ Skills You Need to Improve</h2>
+
+<p>
+    These skills are important for your selected role
+    but were not detected in your resume.
+</p>
+
+{% if result.missing_skills %}
+
+    <div class="missing-skills">
+
+        {% for skill in result.missing_skills %}
+
+            <span class="missing-skill">
+                {{ skill }}
+            </span>
+
+        {% endfor %}
+
+    </div>
+
+{% else %}
+
+    <p class="no-missing-skills">
+        🎉 Excellent! Your resume contains all the
+        required skills for this role.
+    </p>
+
+{% endif %}
+
+
+</div>
+
+
+
+        <!-- Personalized Interview Preparation -->
+
+        <div class="result-section">
+
+            <h2>🎤 Personalized Interview Preparation</h2>
+
+            <p>
+                These questions are based on the skills
+                you should strengthen for your selected role.
+            </p>
+
+
+            {% if result.interview_questions %}
+
+                {% for item in result.interview_questions %}
+
+                    <div class="interview-topic">
+
+                        <h3>
+                            {{ item.skill }}
+                        </h3>
+
+                        <ol>
+
+                            {% for question in item.questions %}
+
+                                <li>
+                                    {{ question }}
+                                </li>
+
+                            {% endfor %}
+
+                        </ol>
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <p class="no-questions">
+                    Great! No additional interview questions were generated.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+<!-- Learning Roadmap -->
+
+<div class="result-section">
+
+    <h2>📚 Your Learning Roadmap</h2>
+
+    <p>
+        Follow these steps to improve the skills
+        required for your selected job role.
+    </p>
+
+    {% if result.learning_roadmaps %}
+
+        {% for item in result.learning_roadmaps %}
+
+            <div class="interview-topic">
+
+                <h3>
+                    {{ item.skill }}
+                </h3>
+
+                <ol>
+
+                    {% for step in item.steps %}
+
+                        <li>
+                            {{ step }}
+                        </li>
+
+                    {% endfor %}
+
+                </ol>
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p class="no-missing-skills">
+            🎉 Great! You already have all the required
+            skills for this role.
+        </p>
+
+    {% endif %}
+
+</div>
+<!-- Career Recommendation -->
+
+<div class="result-section">
+
+    <h2>💼 Career Recommendation</h2>
+
+    <p>
+        Based on the skills detected in your resume,
+        SmartCareer AI recommends the following career path:
+    </p>
+
+    <div class="recommendation-card">
+
+        <h3>
+            {{ career_recommendation.recommended_role
+            |replace("_", " ")
+            |title }}
+        </h3>
+
+        <p>
+            This role has the strongest skill match
+            with your current resume.
+        </p>
+
+    </div>
+
+    <h3>Career Match Scores</h3>
+
+    {% for role, score in career_recommendation.scores.items() %}
+
+        <div class="recommendation-card">
+
+            <strong>
+                {{ role|replace("_", " ")|title }}
+            </strong>
+
+            <p>
+                Match Score: {{ score }}%
+            </p>
+
+        </div>
+
+    {% endfor %}
+
+</div>
+        <!-- Analyze Another Resume -->
+
+        <!-- Download Report -->
+
+<form action="/download-report" method="POST">
+
+    <input
+        type="hidden"
+        name="job_role"
+        value="{{ job_role }}"
+    >
+
+    <input
+        type="hidden"
+        name="resume_text"
+        value="{{ result.resume_text if result.resume_text else '' }}"
+    >
+
+    <button
+        type="submit"
+        class="btn-primary analyze-button"
+    >
+        📥 Download Analysis Report
+    </button>
+
+</form>
+
+
+<!-- Analyze Another Resume -->
+
+<a href="/analyzer" class="btn-primary">
+
+    Analyze Another Resume
+
+</a>
+
+
+    </div>
+
+</section>
+
+
+</body>
+
+</html>
